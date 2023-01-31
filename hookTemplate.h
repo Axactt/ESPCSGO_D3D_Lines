@@ -74,13 +74,12 @@ public:
 	template<int LENGTH>
 	void patchByte( char* lpOriginalFuncAddrs )
 	{
-		DWORD oProc;
-		VirtualProtect( lpOriginalFuncAddrs, LENGTH, PAGE_EXECUTE_READWRITE, &oProc );
+		DWORD oldProc {};
+		VirtualProtect( lpOriginalFuncAddrs, LENGTH, PAGE_EXECUTE_READWRITE, &oldProc );
 		RtlMoveMemory( lpOriginalFuncAddrs, m_gateWay, LENGTH );
-		VirtualProtect( lpOriginalFuncAddrs, LENGTH, oProc, &oProc );
+		VirtualProtect( lpOriginalFuncAddrs, LENGTH, oldProc, &oldProc );
 	}
 
 };
-
 
 #endif

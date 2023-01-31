@@ -59,7 +59,8 @@ void DrawFillRect( IDirect3DDevice9* pDevice, int x, int y, int w, int h, unsign
 }
 
 // Create our hookFunction having prototype as Endscene
-HRESULT  __stdcall hookEndScene( IDirect3DDevice9* pDevice )
+// used auto alogwith trailing-return type + decltype() to deduce return type of function
+auto  __stdcall hookEndScene( IDirect3DDevice9* pDevice )->decltype(EndScenePtr( pDevice ))
 {
 	//std::cout << " I got hooked. now you can draw.\n";
 	// Do our drawing stuff here
@@ -211,8 +212,9 @@ DWORD WINAPI MyThreadFunction( HMODULE hinstDLL )
 
 	//UnHook and unload dll
 	hNP.patchByte<7>( (char*)lpOriginalAddress );
-	FreeLibraryAndExitThread( hinstDLL, 0 );
 	CloseHandle( hinstDLL );
+	FreeLibraryAndExitThread( hinstDLL, 0 );
+	
 	return 0;
 }
 
